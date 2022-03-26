@@ -27,6 +27,10 @@ const User = new Schema({
     type: Number,
     default: 50,
   },
+  companyName: {
+    type: String,
+    default: "",
+  },
   refreshToken: {
     type: [Session],
   },
