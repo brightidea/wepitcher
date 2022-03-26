@@ -1,0 +1,49 @@
+.container {
+  padding: 0;
+  background-image: url('../public/images/wepitcher-home-bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover !important;
+}
+.pageBody {
+  background-color: transparent !important;
+  background-image: radial-gradient(at top right, rgba(255,255,255,.4) 0%, rgba(255,255,255,.96) 83%) !important;
+}
+.main {
+  min-height: calc(100vh - 120px);
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  background: #fff;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 0;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.description {
+  margin: 4rem 0;
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
