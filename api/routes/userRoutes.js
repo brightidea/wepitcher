@@ -13,11 +13,11 @@ const {
 
 router.post("/signup", (req, res, next) => {
   // Verify that first name is not empty
-  if (!req.body.firstName) {
+  if (!req.body.firstName || !req.body.lastName || !req.body.username || !req.body.password || !req.body.companyName  ) {
     res.statusCode = 500;
     res.send({
-      name: "FirstNameError",
-      message: "The first name is required",
+      name: "EmptyFieldError",
+      message: "All fields are required.",
     });
   } else {
     User.register(
@@ -30,6 +30,7 @@ router.post("/signup", (req, res, next) => {
         } else {
           user.firstName = req.body.firstName;
           user.lastName = req.body.lastName || "";
+          user.companyName = req.body.companyName || "";
           const token = getToken({ _id: user._id });
           const refreshToken = getRefreshToken({ _id: user._id });
           user.refreshToken.push({ refreshToken });

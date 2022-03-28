@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+const session = require("express-session");
 
 if (process.env.NODE_ENV !== "production") {
   // Load environment variables from .env file in non prod environments
@@ -20,7 +21,13 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
-
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 //Add the client URL to the CORS policy
 
 const whitelist = process.env.WHITELISTED_DOMAINS

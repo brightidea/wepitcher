@@ -1,13 +1,17 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { UserContext } from "../context/UserContext";
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import styles from '../styles/Account.module.css'
+import { useLocalStorage } from '../utils/localStorage';
 
 // import Loader from "./Loader"
 
 const Account = () => {
     const router = useRouter();
-    const [userContext, setUserContext] = useContext(UserContext)
-    console.log("userContext: ", userContext)
+    const [userContext, setUserContext] = useContext(UserContext);
+    const [userToken, setUserToken] = useLocalStorage("userToken", "");
+
     const fetchUserDetails = useCallback(() => {
         fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + "users/me", {
         method: "GET",
@@ -15,7 +19,7 @@ const Account = () => {
         // Pass authentication token as bearer token in header
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${userContext.token}`,
+            Authorization: `Bearer ${userToken}`,
         },
         }).then(async response => {
         if (response.ok) {
@@ -39,30 +43,31 @@ const Account = () => {
     }, [setUserContext, userContext.token])
 
   useEffect(() => {
-    // fetch only when user details are not present
-    if (userContext.token && !userContext.details) {
+    // fetch when user details are not present but user token is present
+    if (userToken && !userContext.details) {
       fetchUserDetails()
     }
   }, [userContext.details, fetchUserDetails])
 
   useEffect(() => {
     // redirect if no refresh token present
-    if (!userContext.token) {
+    if (!userContext.token && !userToken) {
         router.push('/login');
     }
-  }, [userContext])
+  }, [userContext, userToken])
 
   const logoutHandler = () => {
     fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + "users/logout", {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userContext.token}`,
+        Authorization: `Bearer ${userToken}`,
       },
     }).then(async response => {
       setUserContext(oldValues => {
         return { ...oldValues, details: undefined, token: null }
       })
+      setUserToken(null)
       window.localStorage.setItem("logout", Date.now())
     })
   }
@@ -80,26 +85,28 @@ const Account = () => {
   ) : !userContext.details ? (
     <p>Loading...</p>
   ) : (
-    <div>
-      <div className="user-details">
-        <div>
-          <p>
-            Welcome&nbsp;
-            <strong>
-              {userContext.details.firstName}
-              {userContext.details.lastName &&
-                " " + userContext.details.lastName}
-            </strong>!
-            {userContext.details.companyName}
-          </p>
-          <p>
-            Your reward points: <strong>{userContext.details.points}</strong>
-          </p>
-        </div>
-        <div className="user-actions">
-          <button onClick={logoutHandler}>Logout</button>
-          <button onClick={refetchHandler}>Refetch</button>
-        </div>
+    <div className={styles.container}>
+      <Head>
+        <title>Login | WePitcher - Amazing Pitch Decks</title>
+        <meta name="description" content="A Demo of my skills for the wefunder team :)" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className={styles.pageBody}>
+        <main className={styles.main}>
+          <h1 className={styles.title}>
+            Welcome {userContext.details.firstName}!
+          </h1>
+          <div className={styles.accountContainer}>
+            <p>
+              Your reward points: <strong>{userContext.details.points}</strong>
+            </p>
+            <div className="user-actions">
+              <button onClick={logoutHandler}>Logout</button>
+              <button onClick={refetchHandler}>Refetch</button>
+            </div>
+          </div>
+         
+        </main>
       </div>
     </div>
   )

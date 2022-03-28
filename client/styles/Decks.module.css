@@ -12,17 +12,16 @@
   align-items: center;
   flex-shrink: 0;
 }
-.formContainer {
-  display:flex;
-  margin:0 auto;
-  @apply  w-full max-w-lg justify-center;
-}
-.registerForm {
-  @apply w-full bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-16;
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 0;
 }
 
-.title {
-  padding-top: calc(100vh / 6);
+.title,
+.description {
   text-align: center;
 }
 
@@ -30,7 +29,6 @@
   margin: 4rem 0;
   line-height: 1.5;
   font-size: 1.5rem;
-  text-align: center;
 }
 
 .wepitcherInput {

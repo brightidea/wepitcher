@@ -1,8 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Login.module.css'
-import Navbar from '../components/navbar'
-import Footer from '../components/footer'
+import styles from '../styles/Decks.module.css'
 
 export default function Decks() {
   return (
@@ -13,15 +11,13 @@ export default function Decks() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.pageBody}>
-        <Navbar />
-        <main className={styles.main}>
+        <div className={styles.main}>
           {/* <h1 className={styles.title}>
             Welcome to <Image src="/wepitcher-logo.png" alt="WePitcher Logo" width={280} height={76} />
           </h1> */}
           
-        </main>
+        </div>
       </div>
-      <Footer />
     </div>
   )
 }
