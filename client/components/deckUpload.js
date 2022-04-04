@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image'
 import styles from '../styles/DeckUpload.module.css'
 import imageUpload from '../public/icons/imageUpload.svg';
+import spinner from '../public/icons/spinner.svg';
 
 const DeckUpload = (props) => {
   toast.configure();
@@ -22,7 +23,6 @@ const DeckUpload = (props) => {
   const [uploadContext, setUploadContext] = useContext(UploadContext);
   const [showReupload, setShowReupload] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasDeck, setHasDeck] = useState();
 
   const onChange = e => {
     if (!e.target.files[0]) {
@@ -55,28 +55,29 @@ const DeckUpload = (props) => {
           );
         }
       });
-      setIsSubmitting(false);
-      
+      setUploadContext(() => {
+        return { showReupload: false }
+      });
+
       // Clear percentage
-      setTimeout(() => setUploadPercentage(0), 5000);
+      // setTimeout(() => setUploadPercentage(0), 5000);
 
       const { fileName, filePath, user } = res.data;
       
       setUserContext(oldValues => {
         return { ...oldValues, details: user }
       });
-      setUploadContext(() => {
-        return { showReupload: false }
-      });
+    
       setUploadedFile({ fileName, filePath });
-      setHasDeck(true);
-      setUploadContext(false);
+      setIsSubmitting(false);
       toast('Pitch Deck Successfully Uploaded');
     } catch (err) {
       if (err.response.status === 500) {
         toast('There was a problem with the server');
+        setIsSubmitting(false);
       } else {
         toast(err.response.data.msg);
+        setIsSubmitting(false);
       }
       setUploadPercentage(0)
     }
@@ -86,14 +87,12 @@ const DeckUpload = (props) => {
       return { showReupload: false }
     });
   }
-  console.log("userContext", userContext);
+  console.log("isSubmitting?", isSubmitting);
   return (
     <Fragment>
-      {uploadPercentage === 0 
-        && userContext.details.pitchDeck.images.length === 0 
-        && !hasDeck 
-        || uploadContext.showReupload
-        || !isSubmitting ? 
+      {(uploadPercentage === 0 && userContext.details.pitchDeck.images.length === 0 && !isSubmitting)
+        || (uploadContext.showReupload && !isSubmitting)
+         ? 
         <div>
           <h2>Upload Your Pitch Deck To Get Started
           {!showReupload ?
@@ -138,6 +137,7 @@ const DeckUpload = (props) => {
         </div> 
       : null }
       {uploadPercentage !== 0 ? <Progress percentage={uploadPercentage} /> : null }
+      {isSubmitting ? <Image src={spinner} alt="me" width="60" height="60" /> : null }
 
     </Fragment>
   );

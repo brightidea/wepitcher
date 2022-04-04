@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken")
 const dev = process.env.NODE_ENV !== "production"
 
 exports.COOKIE_OPTIONS = {
-  httpOnly: true,
+  httpOnly: false,
   secure: true,
   signed: true,
   maxAge: eval(process.env.REFRESH_TOKEN_EXPIRY) * 10000,

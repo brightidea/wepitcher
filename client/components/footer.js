@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styles from '../styles/Layout.module.css'
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className={styles.footer}>
         © {new Date().getFullYear()}, Built with &hearts; by &nbsp; 
@@ -24,7 +24,4 @@ function Footer() {
       </footer>
   );
 }
-
 export default Footer;
-
-

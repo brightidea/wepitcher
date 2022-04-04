@@ -13,7 +13,6 @@ const Account = () => {
   const router = useRouter();
   const [userContext, setUserContext] = useContext(UserContext);
   const [uploadContext, setUploadContext] = useContext(UploadContext);
-
   const [userToken, setUserToken] = useLocalStorage("userToken", "");
 
   const fetchUserDetails = useCallback(() => {

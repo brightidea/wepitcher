@@ -7,8 +7,7 @@ import { UserContext } from '../context/UserContext';
 
 export default function Home() {
   const [userContext, setUserContext] = useContext(UserContext)
-  console.log('user context', userContext.details);
-  const isLoggedIn = userContext.details && userContext.details._id && userContext.details._id !== '';
+  const isLoggedIn = userContext.details && userContext.details.username && userContext.details.username !== '';
   return (
     <div className={styles.container}>
       <Head>

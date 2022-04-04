@@ -7,7 +7,7 @@ import Image from 'next/image'
 import styles from '../styles/Layout.module.css'
 import hamburgerMenu from '../public/icons/hamburgerMenu.svg';
 
-function Navbar() {
+const Navbar = () => {
   const router = useRouter();
   const [userContext, setUserContext] = useContext(UserContext);
   const [userToken, setUserToken] = useLocalStorage("userToken", "");
@@ -26,6 +26,7 @@ function Navbar() {
       })
       setUserToken(null);
       window.localStorage.setItem("logout", Date.now());
+      document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       router.push('/login');
     })
   }

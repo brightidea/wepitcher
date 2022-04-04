@@ -202,13 +202,11 @@ router.post('/uploadDeck', verifyUser, (req, res, next) => {
       }
       files.map(
         (file) => {
-          console.log("New file", pitchDeckFile.name);
-          console.log("Old file", file);
           // Lets remove any previously uploaded files before uploading new deck
           if (pitchDeckFile.name !== file) {
             fs.remove(directory + file)
             .then(() => {
-              console.log('removed file success!')
+              console.log('removed ' + file)
             })
           }
         }
@@ -260,7 +258,7 @@ router.post('/uploadDeck', verifyUser, (req, res, next) => {
         User.findById(req.user._id).then(
           (user) => {
             user.pitchDeck = updatedPitchDeckData;
-            
+            // Save updated user
             user.save((err, response) => {
               if (err) {
                 res.statusCode = 500;
@@ -283,5 +281,19 @@ router.post('/uploadDeck', verifyUser, (req, res, next) => {
     console.error(err)
   })
 });
+
+router.get('/', (req, res) => {
+  // Find all user Profiles with an uploaded deck. Ignore profiles thata havent added one yet.
+  User.find({"pitchDeck.pdf":{$ne:""}}, function(err, users) {
+    res.send({users: users});
+ });
+});
+router.get('/:id', (req, res) => {
+  // Find all user Profiles with an uploaded deck. Ignore profiles thata havent added one yet.
+  User.findOne({ _id: req.params.id}, function(err, user) {
+    res.send({profile: user});
+  });
+});
+
 
 module.exports = router;
