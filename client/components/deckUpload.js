@@ -87,7 +87,7 @@ const DeckUpload = (props) => {
       return { showReupload: false }
     });
   }
-  console.log("isSubmitting?", isSubmitting);
+
   return (
     <Fragment>
       {(uploadPercentage === 0 && userContext.details.pitchDeck.images.length === 0 && !isSubmitting)
@@ -95,7 +95,7 @@ const DeckUpload = (props) => {
          ? 
         <div>
           <h2>Upload Your Pitch Deck To Get Started
-          {!showReupload ?
+          {!showReupload && userContext.details.pitchDeck.images.length !== 0  ?
             <div className="w-60 text-center text-xs cursor-pointer bg-red-100 hover:bg-red-400 text-gray-800 font-bold py-1 px-4 rounded items-center m-auto my-4" onClick={cancelReupload}>CANCEL REUPLOAD</div>
             : null
           }

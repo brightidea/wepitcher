@@ -183,7 +183,7 @@ router.post('/uploadDeck', verifyUser, (req, res, next) => {
   }
 
   const pptConversionOptions = {
-    libreofficeBin: "/Applications/LibreOffice.app/Contents/MacOS/soffice",
+    libreofficeBin: process.env.LIBRE_OFFICE_PATH,
     sourceFile: directory + pitchDeckFile.name, // .ppt, .pptx, .odp, .key and .pdf
     outputDir: directory,
     img: true,

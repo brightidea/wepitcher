@@ -6,7 +6,6 @@ import { UserContext } from '../context/UserContext';
 const PitchDeckViewer = (props) => {
   const [uploadContext, setUploadContext] = useContext(UploadContext);
   const [userContext, setUserContext] = useContext(UserContext);
-  console.log(userContext);
   const pitchDeck = props.pitchDeck;
   const pitchDeckImages = pitchDeck.images;
   const reuploadDeck = () => {

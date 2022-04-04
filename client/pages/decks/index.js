@@ -1,8 +1,30 @@
-import Head from 'next/head'
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import PitchDeckCard from '../../components/pitchDeckCard';
-import styles from '../../styles/Decks.module.css'
+import styles from '../../styles/Decks.module.css';
 
-export default function Decks({ profiles }) {
+const Decks = ({ profiles }) => {
+  const router = useRouter();
+  const [data, setData] = useState(null)
+  const [isLoading, setLoading] = useState(false)
+  const { id } = router.query;
+
+  useEffect(() => {
+    if(!data || (data && Object.keys(data).length === 0)){
+      setLoading(true)
+      fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + "users")
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data)
+          setLoading(false);
+      })
+    }
+    
+  }, [data])
+  if (isLoading) return <p>Loading...</p>
+  if (!data) return <p>No User Profiles Available</p>
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -16,7 +38,7 @@ export default function Decks({ profiles }) {
             Explore Pitch Decks
           </h1>
           <div className={styles.decksContainer}>
-            {profiles.users.map((profile, index) => (
+            {data.users.map((profile, index) => (
               <PitchDeckCard key={index} profile={profile} />
             ))}
           </div>
@@ -25,17 +47,5 @@ export default function Decks({ profiles }) {
     </div>
   )
 }
-export async function getStaticProps() {
-  // Call an external API endpoint to get posts.
-  // You can use any data fetching library
-  const res = await fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + "users")
-  const profiles = await res.json()
+export default Decks;
 
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      profiles,
-    },
-  }
-}
