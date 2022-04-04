@@ -1,4 +1,5 @@
 const express = require("express");
+const fileUpload = require('express-fileupload');
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -18,7 +19,7 @@ require("./authenticate");
 const userRouter = require("./routes/userRoutes");
 
 const app = express();
-
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
@@ -28,8 +29,9 @@ app.use(
     saveUninitialized: true,
   })
 );
-//Add the client URL to the CORS policy
+app.use(express.static('public'))
 
+//Add the client URL to the CORS policy
 const whitelist = process.env.WHITELISTED_DOMAINS
   ? process.env.WHITELISTED_DOMAINS.split(",")
   : [];

@@ -32,3 +32,6 @@ h1 {
 .wepitcherNavbarButton {
   @apply hover:border-blue-500 hover:text-blue-500 hover:bg-white mt-4 lg:mt-2 md:ml-4 lg:ml-8;
 }
+.wepitcherInput {
+  @apply appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 mb-3 mt-2 leading-tight focus:outline-none focus:bg-white;
+}

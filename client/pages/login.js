@@ -1,15 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../context/UserContext';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import { useLocalStorage } from '../utils/localStorage';
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Login.module.css'
-import Navbar from '../components/navbar'
-import Footer from '../components/footer'
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Login.module.css';
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 export default function Login() {
   toast.configure();
@@ -79,13 +76,12 @@ export default function Login() {
             Login To Your <Image src="/wepitcher-logo.png" alt="WePitcher Logo" width={280} height={76} /> Account
           </h1>
           <div className={styles.formContainer}>
-
-            <form onSubmit={formSubmitHandler} className="w-full bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-16">
+            <form onSubmit={formSubmitHandler} className="w-full rounded-lg shadow-lg bg-gray-50 px-5 pt-5 pb-5 mt-20">
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Email
                   <input 
-                    className={styles.wepitcherInput}
+                    className="wepitcherInput"
                     id="email"
                     placeholder="Email"
                     type="email"
@@ -97,7 +93,7 @@ export default function Login() {
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Password
                   <input
-                    className={styles.wepitcherInput}
+                    className="wepitcherInput"
                     id="password"
                     type="password"
                     value={password}

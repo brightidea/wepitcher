@@ -88,7 +88,7 @@ export default function Register() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   First Name
                   <input 
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 mt-2 leading-tight focus:outline-none focus:bg-white"
+                    className="wepitcherInput"
                     id="firstName"
                     type="text"
                     placeholder="First Name"
@@ -101,7 +101,7 @@ export default function Register() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Last Name
                   <input 
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="wepitcherInput"
                     id="lastName"
                     type="text"
                     placeholder="Last Name"
@@ -116,7 +116,7 @@ export default function Register() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Email
                   <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-2 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="wepitcherInput"
                     id="email"
                     type="email"
                     placeholder="name@example.com"
@@ -131,7 +131,7 @@ export default function Register() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Password
                   <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="wepitcherInput"
                     id="password"
                     type="password"
                     placeholder="*****************"
@@ -147,7 +147,7 @@ export default function Register() {
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                   Company Name
                   <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="wepitcherInput"
                     id="companyName"
                     type="text"
                     placeholder="Acme Inc."

@@ -1,11 +1,7 @@
-import Link from "next/link";
 import Image from 'next/image'
 import styles from '../styles/Layout.module.css'
 
 function Footer() {
-  // const [{ data }] = useGetCurrentUserQuery();
-  // const isAuthenticated = !!data?.currentUser;
-
   return (
     <footer className={styles.footer}>
         © {new Date().getFullYear()}, Built with &hearts; by &nbsp; 

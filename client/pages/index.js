@@ -7,7 +7,8 @@ import { UserContext } from '../context/UserContext';
 
 export default function Home() {
   const [userContext, setUserContext] = useContext(UserContext)
-  console.log(userContext);
+  console.log('user context', userContext.details);
+  const isLoggedIn = userContext.details && userContext.details._id && userContext.details._id !== '';
   return (
     <div className={styles.container}>
       <Head>
@@ -18,9 +19,10 @@ export default function Home() {
       <div className={styles.backgroundContainer}></div>
 
       <div className={styles.main}>
-        <h1 className="mb-8">
+        <h1 className="mb-8 text-center">
           Welcome to <Image src="/wepitcher-logo.png" alt="WePitcher Logo" width={280} height={76} />
         </h1>
+        {!isLoggedIn ?
         <div className="hero-buttons inline-flex">
           <Link href="/login">
             <button className="wepitcherButton">
@@ -33,7 +35,12 @@ export default function Home() {
               Register
             </button>
           </Link>
-        </div>
+        </div> 
+        : <Link href="/account">
+          <button className="wepitcherButton">
+              GO TO ACCOUNT
+            </button>
+          </Link> }
       </div>
     </div>
   )

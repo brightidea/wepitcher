@@ -1,8 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const PitchDeck = require("../models/user");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const fs = require('fs-extra');
+const document = require("file-convert");
+const { ImageMagick } = require('pdf-images');
+const path = require('path');
 
 const {
   getToken,
@@ -123,7 +128,7 @@ router.post("/refreshToken", (req, res, next) => {
   }
 });
 
-router.get("/me", verifyUser, (req, res, next) => {
+router.get("/me", verifyUser, (req, res) => {
   res.send(req.user);
 });
 
@@ -153,4 +158,130 @@ router.get("/logout", verifyUser, (req, res, next) => {
     (err) => next(err)
   );
 });
+
+router.post('/uploadDeck', verifyUser, (req, res, next) => {
+  // Check if file was uploaded. If empty return error.
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+  const apiProtocol = req.protocol + '://';
+  const apiHost = req.get('host') + '/';
+  const pitchDeckFile = req.files.file;
+  const pitchDeckFileName = pitchDeckFile.name;
+  const pitchDeckTitle = req.body.pitchDeckTitle;
+  const filePath = 'uploads/decks/' + req.user._id + '/';
+  const directory = process.cwd() + '/public/' + filePath;
+  const pitchDeckPDFFile = filePath + pitchDeckFileName.substr(0, pitchDeckFileName.lastIndexOf(".")).concat('.pdf');
+  const pitchDeckImageArray = [];
+
+  // Lets make sure its only a pdf getting uploaded
+  if (pitchDeckFile.mimetype !== 'application/pdf' 
+    && pitchDeckFile.mimetype !== 'application/ppt'
+    && pitchDeckFile.mimetype !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation')
+  {
+    return res.status(400).json({ msg: 'Sorry only PPT & PDF\'s allowed at this time.' });
+  }
+
+  const pptConversionOptions = {
+    libreofficeBin: "/Applications/LibreOffice.app/Contents/MacOS/soffice",
+    sourceFile: directory + pitchDeckFile.name, // .ppt, .pptx, .odp, .key and .pdf
+    outputDir: directory,
+    img: true,
+    imgExt: "jpg", // Optional and default value png
+    density: 120, //  Optional and default density value is 120
+    disableExtensionCheck: true, // convert any files to pdf or/and image
+  };
+
+  // Make sure directory exists or you'll get error
+  fs.ensureDir(directory)
+  .then(() => {
+    // read the directory for existing uploads
+    fs.readdir(directory, function (err, files) {
+      if (err) {
+        console.log(err)
+      }
+      files.map(
+        (file) => {
+          console.log("New file", pitchDeckFile.name);
+          console.log("Old file", file);
+          // Lets remove any previously uploaded files before uploading new deck
+          if (pitchDeckFile.name !== file) {
+            fs.remove(directory + file)
+            .then(() => {
+              console.log('removed file success!')
+            })
+          }
+        }
+      )
+    })
+    // if it exists lets move the uploaded pdf there
+    pitchDeckFile.mv(directory + pitchDeckFile.name, err => {
+      // whoops we got a problem
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+      // Great Success! The Presentation file was moved. Lets do some fun stuff with it.
+      document
+      .convert(pptConversionOptions)
+      .then((converstion_response) => {
+        // The library used to convert from ppt & pdf to images doesnt return the images in its response
+        // so lets get all the images in the directory as an array for saving to the users profile.
+        fs.readdir(directory, function (err, files) {
+          if (err) {
+            console.log(err)
+          }
+          files.map(
+            (file) => { 
+              // Lets not add the PDF and PPT(X) Files to the array so check for those before pushing the new images to array.
+              if (
+                path.extname(file) !== '.pdf'
+                && path.extname(file) !== '.ppt'
+                && path.extname(file) !== '.pptx'
+              ) 
+              {
+                // Make sure to include protocol + host + path to files to make things easy on frontend
+                pitchDeckImageArray.push(apiProtocol + apiHost + filePath + file);
+              }
+            }
+          )
+          // Lets sort the array so it retuns in correct order even if Numbers exist in filename. example file-10.jpg should come after file-9.jpg and not file-1.jpg 
+          pitchDeckImageArray.sort((a, b) => isFinite(a[0]) - isFinite(b[0])
+              || a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
+          );
+        });
+        // Lets create the new pitchdeck object
+        const updatedPitchDeckData = {
+          title: pitchDeckTitle, 
+          images: pitchDeckImageArray,
+          pdf: pitchDeckPDFFile
+        }
+        // Find the user
+        User.findById(req.user._id).then(
+          (user) => {
+            user.pitchDeck = updatedPitchDeckData;
+            
+            user.save((err, response) => {
+              if (err) {
+                res.statusCode = 500;
+                res.send(err);
+              } else {
+                res.statusCode = 200;
+                return res.status(200).send({ success: true, user });
+              }
+            });
+          },
+          (err) => next(err)
+        );
+      })
+      .catch((e) => {
+        console.log("e", e);
+      });
+    });
+  })
+  .catch(err => {
+    console.error(err)
+  })
+});
+
 module.exports = router;

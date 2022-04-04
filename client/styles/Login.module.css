@@ -1,38 +1,17 @@
 .container {
   padding: 0;
 }
-
-.footer {
-  display: flex;
-  flex: 1;
-  padding: 2rem 0;
-  background: #fff;
-  border-top: 1px solid #eaeaea;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-}
 .formContainer {
-  display:flex;
   margin:0 auto;
-  @apply  w-full max-w-lg justify-center;
+  @apply flex w-full max-w-lg justify-center;
 }
 .registerForm {
-  @apply w-full bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-16;
+  @apply w-full rounded-lg shadow-lg bg-gray-50 px-5 pt-5 pb-5 mt-20 mb-20;
 }
-
 .title {
   padding-top: calc(100vh / 6);
-  text-align: center;
+  @apply text-center capitalize;
 }
-
 .description {
-  margin: 4rem 0;
-  line-height: 1.5;
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-.wepitcherInput {
-  @apply appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 mt-2 leading-tight focus:outline-none focus:bg-white;
+  @apply leading-6 my-4 mx-0 text-base text-center;
 }

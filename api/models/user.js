@@ -34,6 +34,20 @@ const User = new Schema({
   refreshToken: {
     type: [Session],
   },
+  pitchDeck: {
+    title: {
+      type: String,
+      default: "",
+    },
+    pdf: {
+      type: String,
+      default: "",
+    },
+    images: {
+      type: Array,
+      default: []
+    }
+  }
 })
 
 //Remove refreshToken from the response
